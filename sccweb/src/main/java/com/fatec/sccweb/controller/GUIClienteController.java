@@ -1,11 +1,12 @@
 package com.fatec.sccweb.controller;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fatec.sccweb.model.Cliente;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Controller
 @RequestMapping(path = "/sig")
@@ -29,25 +32,31 @@ public class GUIClienteController {
 	}
 
 	public List<Cliente> consultaTodos() {
-		RestTemplate template = new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate();
 		String url = "http://localhost:8080/api/v1/clientes";
 		logger.info(">>>>>> consulTodos clientes chamado");
 
 		try {
-			ListaDeClientes resposta = template.getForObject(url, ListaDeClientes.class);
-			List<Cliente> lista = resposta.getLista();
+			ResponseEntity<String> resposta = restTemplate.getForEntity(url, String.class);
+			logger.info(">>>>>> consulTodos clientes chamado =>" + resposta.getBody());
+			Gson gson = new Gson();
 
+			Type tipoLista = new TypeToken<ArrayList<Cliente>>() {	}.getType();
+			ArrayList<Cliente> lista = gson.fromJson(resposta.getBody(), tipoLista);
 			return lista;
-
 		} catch (ResourceAccessException e) {
-			logger.info(">>>>>> consulta CEP erro nao esperado ");
+			logger.info(">>>>>> consultaTodos clientes erro Resource Exception => " + e.getMessage());
 			return null;
 
 		} catch (HttpClientErrorException e) {
 			logger.info(">>>>>> consultaTodos clientes erro HttpClientErrorException =>" + e.getMessage());
 			return null;
 
+		} catch (Exception e) {
+			logger.info(">>>>>> consultaTodos clientes erro não esperado =>" + e.getMessage());
+			e.printStackTrace();
+			return null;
 		}
-		
+
 	}
 }

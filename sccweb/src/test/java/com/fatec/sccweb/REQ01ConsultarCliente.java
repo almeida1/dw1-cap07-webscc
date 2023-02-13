@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fatec.sccweb.controller.GUIClienteController;
 
-
 @WebMvcTest(GUIClienteController.class)
 class REQ01ConsultarCliente {
 	@Autowired
@@ -28,8 +27,7 @@ class REQ01ConsultarCliente {
 	@Test
 	void ct01_consultar_todos_clientes_com_sucesso() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/sig/clientes").contentType("application/json")
-				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
+		.accept(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.view().name("consultarCliente"));
 	}
@@ -41,7 +39,7 @@ class REQ01ConsultarCliente {
 				.andReturn().getResponse();
 
 		// then
-				
+
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
 	}

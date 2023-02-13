@@ -3,20 +3,20 @@ package com.fatec.sccweb.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fatec.sccweb.model.Cliente;
+import com.fatec.sccweb.model.ClienteDTO;
 
 public class ListaDeClientes {
-	private List<Cliente> lista;
+	private List<ClienteDTO> lista;
 
     public ListaDeClientes() {
         lista= new ArrayList<>();
     }
 
-	public List<Cliente> getLista() {
+	public List<ClienteDTO> getLista() {
 		return lista;
 	}
 
-	public void setLista(List<Cliente> lista) {
+	public void setLista(List<ClienteDTO> lista) {
 		this.lista = lista;
 	}
     
